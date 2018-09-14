@@ -1,0 +1,21 @@
+# -*- coding: utf-8 -*-
+
+# 利用tushare接口对股票数据进行下载
+import tushare as ts
+import datetime
+
+df0 = ts.get_stock_basics()
+
+for i in range(0, len(df0)):
+    if i == 2:
+        break
+    else:
+        code = df0.ix[i].name  # 获取股票代码
+        date = df0.ix[str(code)]['timeToMarket']  # 获取股票上市日期
+        ipo = datetime.datetime.strptime(
+            str(date), '%Y%m%d')  # 将数据进行转换，将字符串变为日期形式
+        df = ts.get_k_data(str(code), start=str(ipo),
+                           end=str(datetime.datetime.now()))  # 参数都为字符串
+        filename0 = str(code) + '.csv'
+        df.to_csv('c:/day/%s' % filename0, index=False)
+        #df.to_csv('c:/day//' + filename0, index=False)
